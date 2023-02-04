@@ -1,6 +1,6 @@
 # Thb.OmnivoreClient
 
-A .NET client for [Omnivore](https://omnivore.app/), the free, open source, read-it-later app for serious readers.
+A .NET client for [Omnivore GraphQL API](https://omnivore.app/), the free, open source, read-it-later app for serious readers.
 
 # How to install
 
