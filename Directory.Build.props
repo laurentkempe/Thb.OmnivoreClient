@@ -1,0 +1,18 @@
+<Project>
+
+    <PropertyGroup>
+        <Authors>Laurent Kempé</Authors>
+        <Description>.NET client for Omnivore API, the free, open source, read-it-later app for serious readers.</Description>
+
+        <!-- PackageProjectUrl is different from the repository URL. It can be a documentation
+             website or a website explaining the project -->
+        <PackageProjectUrl>https://laurentkempe.com/</PackageProjectUrl>
+
+        <!-- A list of tags to help the search engine to understand the content of the package -->
+        <PackageTags>library, omnivore</PackageTags>
+        <PackageIcon>icon.png</PackageIcon>
+        <PackageLicenseFile>LICENSE</PackageLicenseFile>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+    </PropertyGroup>
+    
+</Project>
