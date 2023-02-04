@@ -1,6 +1,6 @@
 namespace Thb.OmnivoreClient.Tests;
 
-public class Tests
+public sealed class OmnivoreClientTests
 {
     [SetUp]
     public void Setup()
