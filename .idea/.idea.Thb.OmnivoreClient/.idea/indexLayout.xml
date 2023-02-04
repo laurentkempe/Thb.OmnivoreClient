@@ -3,8 +3,12 @@
   <component name="UserContentModel">
     <attachedFolders />
     <explicitIncludes>
+      <Path>.github/workflows/publish.yml</Path>
+      <Path>.gitignore</Path>
+      <Path>LICENSE</Path>
       <Path>README.md</Path>
       <Path>docs/README.md</Path>
+      <Path>global.json</Path>
     </explicitIncludes>
     <explicitExcludes />
   </component>
