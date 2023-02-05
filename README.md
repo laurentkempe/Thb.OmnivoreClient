@@ -1,6 +1,7 @@
 # Thb.OmnivoreClient
 
-A .NET client for [Omnivore GraphQL API](https://omnivore.app/), the free, open source, read-it-later app for serious readers.
+A .NET client for [Omnivore GraphQL API](https://omnivore.app/), the free, open source, read-it-later app for serious
+readers.
 
 # How to install
 
@@ -8,7 +9,8 @@ Install the NuGet package [`Thb.OmnivoreClient`](https://www.nuget.org/packages/
 
 # How to use
 
-Set `OMNIVORE_AUTH_TOKEN` environment variable to your Omnivore API token. See [how to get your API token](https://docs.omnivore.app/integrations/api.html#getting-an-api-token). 
+Set `OMNIVORE_AUTH_TOKEN` environment variable to your Omnivore API token.
+See [how to get your API token](https://docs.omnivore.app/integrations/api.html#getting-an-api-token).
 
 ## Create a client
 
@@ -16,7 +18,6 @@ Set `OMNIVORE_AUTH_TOKEN` environment variable to your Omnivore API token. See [
 var apiUrl = Environment.GetEnvironmentVariable("OMNIVORE_API_URL") ?? "https://api-prod.omnivore.app/api/graphql";
 var omnivoreClient = OmnivoreClientFactory.Create(apiUrl, Environment.GetEnvironmentVariable("OMNIVORE_AUTH_TOKEN"));
 ```
-
 
 ## GetUserAsync
 

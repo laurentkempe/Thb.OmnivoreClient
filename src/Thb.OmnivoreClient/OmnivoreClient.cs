@@ -3,25 +3,15 @@ using GraphQL.Client.Abstractions;
 
 namespace Thb.OmnivoreClient;
 
-/// <summary>
-///  A client for the Omnivore GraphQL API. 
-/// </summary>
-public sealed class OmnivoreClient : IOmnivoreClient
+internal sealed class OmnivoreClient : IOmnivoreClient
 {
     private readonly IGraphQLClient _graphQLClient;
 
-    /// <summary>
-    ///  Creates a new <see cref="OmnivoreClient"/> instance.
-    /// </summary>
-    /// <param name="graphQLClient"><see cref="IGraphQLClient"/> used to query the Omnivore GraphQL API.</param>
     public OmnivoreClient(IGraphQLClient graphQLClient)
     {
         _graphQLClient = graphQLClient;
     }
-    
-    /// <summary>
-    /// Get the current user. 
-    /// </summary>
+
     public async Task<User> GetUserAsync()
     {
         var userQueryRequest = new GraphQLRequest
@@ -40,17 +30,14 @@ public sealed class OmnivoreClient : IOmnivoreClient
                     }
                   }
                 }
-            " 
+            "
         };
-        
+
         var userResponse = await _graphQLClient.SendQueryAsync<UserResponse>(userQueryRequest);
 
         return userResponse.Data.Me;
     }
 
-    /// <summary>
-    ///  Search for articles.
-    /// </summary>
     public async Task<IEnumerable<Node>> SearchAsync(string searchQuery = "")
     {
         string? after = null;
@@ -59,7 +46,7 @@ public sealed class OmnivoreClient : IOmnivoreClient
         {
             Variables = new
             {
-                after = after,
+                after,
                 first = 2,
                 format = "markdown",
                 includeContent = true,
@@ -103,20 +90,57 @@ public sealed class OmnivoreClient : IOmnivoreClient
             }
             """
         };
-        
+
         var searchResponse = await _graphQLClient.SendQueryAsync<SearchResponse>(searchQueryRequest);
 
         return (searchResponse.Data.Search.Edges ?? Array.Empty<Edges>()).Select(e => e.Node);
     }
-    
+
+    public async Task<Uri> SaveUrlAsync(User user, Uri url)
+    {
+        var saveUrlRequest = new GraphQLRequest
+        {
+            Variables = new
+            {
+                input = new
+                {
+                    user.Id,
+                    source = "thb-omnivoreclient",
+                    url = url.ToString()
+                }
+            },
+            Query = """
+                 mutation SaveUrl($input: SaveUrlInput!) {
+                   saveUrl(input: $input) {
+                     ... on SaveSuccess {
+                       url
+                     }
+                     ... on SaveError {
+                       errorCodes
+                     }
+                   }
+                 }
+                 """
+        };
+
+        var saveUrl = await _graphQLClient.SendMutationAsync<SaveUrlResponse>(saveUrlRequest);
+
+        return Uri.TryCreate(saveUrl.Data.SaveUrl.Url, UriKind.Absolute, out var uri)
+            ? uri
+            : throw new InvalidOperationException("Invalid URL returned from Omnivore API");
+    }
+
     private record UserResponse(User Me);
+
     private record SearchResponse(Search Search);
+
     private record Search(Edges[]? Edges, PageInfo? PageInfo);
+
     private record Edges(Node Node);
 
-    public record User(string Id, string Name, bool IsFullUser, Profile Profile);
-    public record Profile(string Id, string Username, string PictureUrl, string Bio);
+    private record PageInfo(bool HasNextPage, string? EndCursor, int TotalCount);
 
-    public record Node(string Slug, string Title, string Url, string OriginalArticleUrl, string Content);
-    public record PageInfo(bool HasNextPage, string? EndCursor, int TotalCount);
+    private record SaveUrlResponse(SaveUrl SaveUrl);
+
+    private record SaveUrl(string Url);
 }
