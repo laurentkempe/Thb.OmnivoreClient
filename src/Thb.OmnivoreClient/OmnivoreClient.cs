@@ -6,7 +6,7 @@ namespace Thb.OmnivoreClient;
 /// <summary>
 ///  A client for the Omnivore GraphQL API. 
 /// </summary>
-public sealed class OmnivoreClient
+public sealed class OmnivoreClient : IOmnivoreClient
 {
     private readonly IGraphQLClient _graphQLClient;
 
@@ -108,7 +108,7 @@ public sealed class OmnivoreClient
 
         return (searchResponse.Data.Search.Edges ?? Array.Empty<Edges>()).Select(e => e.Node);
     }
-
+    
     private record UserResponse(User Me);
     private record SearchResponse(Search Search);
     private record Search(Edges[]? Edges, PageInfo? PageInfo);
