@@ -104,7 +104,7 @@ internal sealed class OmnivoreClient : IOmnivoreClient
             {
                 input = new
                 {
-                    user.Id,
+                    clientRequestId = user.Id,
                     source = "thb-omnivoreclient",
                     url = url.ToString()
                 }
