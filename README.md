@@ -40,3 +40,11 @@ foreach (var searchResult in searchResults)
     Console.WriteLine();
 }
 ```
+
+# Development
+
+## How to package locally
+
+```bash
+dotnet r pack
+```
