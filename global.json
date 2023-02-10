@@ -2,5 +2,12 @@
   "sdk": {
     "rollForward": "feature",
     "version": "7.0.102"
+  },
+  "scripts": {
+    "build": "dotnet build --configuration Release",
+    "prepackage": "del /Q .\\artifacts",
+    "package": "dotnet pack --configuration Release --no-build --output .\\artifacts",
+    "postpackage": "echo \"Packaging complete\"",
+    "pack": "dotnet r build && dotnet r package"
   }
 }
