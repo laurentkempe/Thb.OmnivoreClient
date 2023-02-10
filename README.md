@@ -1,3 +1,7 @@
+[![NuGet](https://img.shields.io/nuget/v/Thb.OmnivoreClient.svg)](https://www.nuget.org/packages/Thb.OmnivoreClient/)
+[![GitHub license](https://img.shields.io/github/license/laurentkempe/Thb.OmnivoreClient.svg)](https://github.com/laurentkempe/Thb.OmnivoreClient/blob/main/LICENSE)
+[![publish](https://github.com/laurentkempe/Thb.OmnivoreClient/actions/workflows/publish.yml/badge.svg)](https://github.com/laurentkempe/Thb.OmnivoreClient/actions/workflows/publish.yml)
+
 # Thb.OmnivoreClient
 
 A .NET client for [Omnivore GraphQL API](https://omnivore.app/), the free, open source, read-it-later app for serious
