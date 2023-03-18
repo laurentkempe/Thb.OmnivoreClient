@@ -24,6 +24,7 @@ public sealed record Result<T>
     public bool IsSuccess { get; }
     public string[]? Errors { get; }
 
+    // ReSharper disable once UnusedMember.Global
     public void Deconstruct(out T? Value, out bool IsSuccess, out string[]? Errors)
     {
         Value = this.Value;
