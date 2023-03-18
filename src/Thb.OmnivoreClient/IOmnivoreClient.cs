@@ -9,13 +9,13 @@ public interface IOmnivoreClient
     ///     Get the current user.
     /// </summary>
     // ReSharper disable once UnusedMember.Global
-    Task<User> GetUserAsync();
+    Task<Result<User>> GetUserAsync();
 
     /// <summary>
     ///     Search for articles.
     /// </summary>
     // ReSharper disable once UnusedMember.Global
-    Task<IEnumerable<Node>> SearchAsync(string searchQuery = "");
+    Task<Result<IEnumerable<Node>>> SearchAsync(string searchQuery = "");
 
     /// <summary>
     ///     Save a URL to Omnivore.
@@ -25,5 +25,5 @@ public interface IOmnivoreClient
     /// <returns><see cref="Uri" /> of the saved content in Omnivore.</returns>
     /// <exception cref="InvalidOperationException">Saving the content in Omnivore failed.</exception>
     // ReSharper disable once UnusedMember.Global
-    Task<Uri> SaveUrlAsync(User user, Uri url);
+    Task<Result<Uri>> SaveUrlAsync(User user, Uri url);
 }

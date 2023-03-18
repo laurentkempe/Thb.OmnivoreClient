@@ -12,7 +12,7 @@ internal sealed class OmnivoreClient : IOmnivoreClient
         _graphQLClient = graphQLClient;
     }
 
-    public async Task<User> GetUserAsync()
+    public async Task<Result<User>> GetUserAsync()
     {
         var userQueryRequest = new GraphQLRequest
         {
@@ -33,12 +33,21 @@ internal sealed class OmnivoreClient : IOmnivoreClient
             "
         };
 
-        var userResponse = await _graphQLClient.SendQueryAsync<UserResponse>(userQueryRequest);
+        try
+        {
+            var userResponse = await _graphQLClient.SendQueryAsync<UserResponse>(userQueryRequest);
 
-        return userResponse.Data.Me;
+            return userResponse.Errors is null
+                ? Result<User>.Success(userResponse.Data.Me)
+                : Result<User>.Failure(userResponse.Errors.Select(e => e.Message).ToArray());
+        }
+        catch (Exception e)
+        {
+            return Result<User>.Failure(new[] { e.Message });
+        }
     }
 
-    public async Task<IEnumerable<Node>> SearchAsync(string searchQuery = "")
+    public async Task<Result<IEnumerable<Node>>> SearchAsync(string searchQuery = "")
     {
         string? after = null;
 
@@ -91,12 +100,22 @@ internal sealed class OmnivoreClient : IOmnivoreClient
             """
         };
 
-        var searchResponse = await _graphQLClient.SendQueryAsync<SearchResponse>(searchQueryRequest);
+        try
+        {
+            var searchResponse = await _graphQLClient.SendQueryAsync<SearchResponse>(searchQueryRequest);
 
-        return (searchResponse.Data.Search.Edges ?? Array.Empty<Edges>()).Select(e => e.Node);
+            return searchResponse.Errors is null
+                ? Result<IEnumerable<Node>>.Success(
+                    (searchResponse.Data.Search.Edges ?? Array.Empty<Edges>()).Select(e => e.Node))
+                : Result<IEnumerable<Node>>.Failure(searchResponse.Errors.Select(e => e.Message).ToArray());
+        }
+        catch (Exception e)
+        {
+            return Result<IEnumerable<Node>>.Failure(new[] { e.Message });
+        }
     }
 
-    public async Task<Uri> SaveUrlAsync(User user, Uri url)
+    public async Task<Result<Uri>> SaveUrlAsync(User user, Uri url)
     {
         var saveUrlRequest = new GraphQLRequest
         {
@@ -123,24 +142,45 @@ internal sealed class OmnivoreClient : IOmnivoreClient
                  """
         };
 
-        var saveUrl = await _graphQLClient.SendMutationAsync<SaveUrlResponse>(saveUrlRequest);
+        try
+        {
+            var saveUrlResponse = await _graphQLClient.SendMutationAsync<SaveUrlResponse>(saveUrlRequest);
 
-        return Uri.TryCreate(saveUrl.Data.SaveUrl.Url, UriKind.Absolute, out var uri)
-            ? uri
-            : throw new InvalidOperationException("Invalid URL returned from Omnivore API");
+            if (saveUrlResponse.Errors is null)
+            {
+                return Uri.TryCreate(saveUrlResponse.Data.SaveUrl.Url, UriKind.Absolute, out var uri)
+                    ? Result<Uri>.Success(uri)
+                    : Result<Uri>.Failure(new[] { "Invalid URL returned from Omnivore API." });
+            }
+
+            return Result<Uri>.Failure(saveUrlResponse.Errors.Select(e => e.Message).ToArray());
+        }
+        catch (Exception e)
+        {
+            return Result<Uri>.Failure(new[] { e.Message });
+        }
     }
 
+    // ReSharper disable once ClassNeverInstantiated.Local
     private record UserResponse(User Me);
 
+    // ReSharper disable once ClassNeverInstantiated.Local
     private record SearchResponse(Search Search);
 
+    // ReSharper disable once ClassNeverInstantiated.Local
+    // ReSharper disable once NotAccessedPositionalProperty.Local
     private record Search(Edges[]? Edges, PageInfo? PageInfo);
 
+    // ReSharper disable once ClassNeverInstantiated.Local
     private record Edges(Node Node);
 
+    // ReSharper disable once ClassNeverInstantiated.Local
+    // ReSharper disable NotAccessedPositionalProperty.Local
     private record PageInfo(bool HasNextPage, string? EndCursor, int TotalCount);
 
+    // ReSharper disable once ClassNeverInstantiated.Local
     private record SaveUrlResponse(SaveUrl SaveUrl);
 
+    // ReSharper disable once ClassNeverInstantiated.Local
     private record SaveUrl(string Url);
 }
