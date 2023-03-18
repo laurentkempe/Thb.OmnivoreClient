@@ -15,6 +15,10 @@ jobs:
 
     steps:
 
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0 # Get all history to allow automatic versioning using MinVer
+
       - name: 'Qodana Scan'
         uses: JetBrains/qodana-action@main
         env:
