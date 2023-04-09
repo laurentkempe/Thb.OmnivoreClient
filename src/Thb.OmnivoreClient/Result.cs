@@ -25,10 +25,10 @@ public sealed record Result<T>
     public string[]? Errors { get; }
 
     // ReSharper disable once UnusedMember.Global
-    public void Deconstruct(out T? Value, out bool IsSuccess, out string[]? Errors)
+    public void Deconstruct(out T? value, out bool isSuccess, out string[]? errors)
     {
-        Value = this.Value;
-        IsSuccess = this.IsSuccess;
-        Errors = this.Errors;
+        value = Value;
+        isSuccess = IsSuccess;
+        errors = Errors;
     }
 }
