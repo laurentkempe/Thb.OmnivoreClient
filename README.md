@@ -1,4 +1,4 @@
-⚠️ Project discontinued becasue OmnivoreApp shut down
+⚠️ Project discontinued because OmnivoreApp has been shut down.
 
 [![NuGet](https://img.shields.io/nuget/v/Thb.OmnivoreClient.svg)](https://www.nuget.org/packages/Thb.OmnivoreClient/)
 [![GitHub license](https://img.shields.io/github/license/laurentkempe/Thb.OmnivoreClient.svg)](https://github.com/laurentkempe/Thb.OmnivoreClient/blob/main/LICENSE)
